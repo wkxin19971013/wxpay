@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <script src="./js/rem.js"></script>
+    <script src="./js/jquery-2.0.0.min.js"></script>
+    <style>
+        .top {
+            width: 100%;
+            height: 130px;
+            background: pink;
+        }
+
+        .list {
+            width: 100%;
+            background: #ffffff;
+        }
+
+        .list-one {
+            width: 100%;
+            height: 1rem;
+            position: relative;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .img {
+            width: 1rem;
+            height: 1rem;
+            background: #ccc;
+            border-radius: 5px;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            float: left;
+        }
+
+        .img-right {
+            float: right;
+            width: 2.5rem;
+            height: 1rem;
+        }
+
+        .wen {
+            width: 0.5rem;
+            height: 1.5rem;
+            background: #0984e9;
+            padding: 3px 3px;
+            color: #ffffff;
+        }
+
+        .title {
+            display: inline-block;
+            padding: 10px 10px;
+            width: 2.2rem;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .money {
+            color: black;
+            font-size: 16px;
+        }
+
+        .list-two {
+            padding: 15px 10px;
+        }
+
+        .list-two p {
+            margin: 10px 0;
+        }
+
+        .sb {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .address {
+            font-size: 14px;
+            color: rgb(180, 180, 179);
+            float: right;
+        }
+
+        .list3,
+        .list4 {
+            padding: 10px 10px;
+            border-top: 10px solid #ccc;
+        }
+
+        .list3 p,
+        .list4 p {
+            padding: 10px 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .pay {
+            padding: 0 10px;
+            width: 100%;
+            position: fixed;
+            bottom: 0px;
+            background: #fff;
+            border-top: 1px solid #ccc;
+        }
+
+        .pay .sj {
+            float: left;
+            width: 1.5rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pay .qian {
+            color: red;
+        }
+
+        .pay .zf {
+            float: right;
+            width: 1.5rem;
+            height: 0.5rem;
+            font-size: 14px;
+            line-height: 0.5rem;
+            color: #fff;
+            text-align: center;
+            background: linear-gradient(to right, #ff0, rgb(255, 166, 0));
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top"></div>
+    <div class="list">
+        <div class="list1">
+            <!-- <div class="list-one">
+            <div class="img"></div>
+            <div class="img-right">
+                <span class="title">3M PM2.5颗粒物防护口罩劲滤是非得失水电费不管</span><br>
+                <span class="wen">常温</span>
+                <span class="money">￥24.50</span>
+            </div>
+        </div> -->
+            <!-- <div class="list-two">
+            <p><span class="sb">设备</span><span class="address">世纪华普(北京)健康科技有限公司-{{data.dname}}</span></p>
+            <p><span class="sb">设备地址</span><span class="address">北京市海淀区德胜门西大街15号</span></p>
+        </div> -->
+        </div>
+        <div class="list3" style="display: none">
+            <p><span class="sb">商家活动</span><span class="address">暂无></span></p>
+            <p><span class="sb">促销活动</span><span class="address">暂无></span></p>
+            <p><span class="sb">优惠</span><span class="address">无可用></span></p>
+        </div>
+        <div class="list4" style="display: none">
+            <p><span class="sb">支付宝</span></p>
+            <p><span class="sb">余额支付(￥0.00)</span><span class="address">同步</span></p>
+        </div>
+        <div class="pay">
+            <!-- <div class="sj">实付金额：<span class="qian">￥24.90</span></div> -->
+            <div class="zf">立即支付</div>
+        </div>
+        <div style="height: 0.5rem"></div>
+    </div>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);//获得当前连接中？后参数
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+
+
+        var appid = "";
+        var timeStamp = "";
+        var nonceStr = "";
+        var package = "";
+        var signType = "";
+        var paySign = "";
+        var p = getUrlParam("p");
+
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://shijihuapu.com:8000/orderpay/?p=" + p,
+                async: true,
+                dataType: "json",
+                data: {//向后台传递参数
+                },
+                success: function (res) {//请求成功，从后台返回数据
+                    var order = res.order
+
+                    localStorage.setItem('order', order)
+                    var str = ''
+                    var str1 = ''
+                    str += `<div class="list-one">
+                            <div class="img">${res.imgUrl}</div>
+                                <div class="img-right">
+                                    <span class="title">${res.productName}</span><br>
+                                    <span class="wen">常温</span>
+                                    <span class="money">￥${res.price}</span>
+                                </div>
+                            </div>
+                        <div class="list-two">
+                            <p><span class="sb">设备</span><span class="address">世纪华普(北京)健康科技有限公司-${res.dname}</span></p>
+                            <p><span class="sb">设备地址</span><span class="address">${res.title}</span></p>
+                        </div>`
+                    str1 += `
+                        <div class="sj">实付金额：<span class="qian">￥${res.price}</span></div>
+                        `
+                    $(".list1").append(str)
+                    $(".pay").append(str1)
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.status);
+                    console.log(XMLHttpRequest.readyState);
+                    console.log(textStatus);
+                }
+            })
+        })
+        /*
+                    var appid = res.appId
+                            var timeStamp = res.timeStamp
+                            var nonceStr = res.nonceStr
+                            var package = res.package
+                   var signType = res.signType
+                            var paySign = res.paySign
+        */
+        appid = getQueryVariable("appid");
+        timeStamp = getQueryVariable("timeStamp");
+        nonceStr = getQueryVariable("nonceStr");
+        paySign = getQueryVariable("paySign");
+        package = getQueryVariable("package");
+        signType = getQueryVariable("signType");
+        out_trade_no = getQueryVariable("out_trade_no");
+
+        //alert(package);
+
+        $(function () {
+            if (paySign == "" || paySign == "undefined") {
+
+                let scope = "snsapi_base";
+                let appid = "wxc9b8f83e737cb993";
+                let redirect_uri = encodeURIComponent('http://shijihuapu.com/cashier/wxpay/zhifu1.html?p=' + p);
+
+                window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=" + scope + "#wechat_redirect"
+                return false;
+            } else {
+
+                $(".zf").click(function () {
+                    function onBridgeReady() {
+                        WeixinJSBridge.invoke(
+                            'getBrandWCPayRequest', {
+                                "appId": appid,
+                                " out_trade_no": out_trade_no,
+                                "timeStamp": timeStamp,
+                                "nonceStr": nonceStr,
+                                "package": "prepay_id=" + package,
+                                "signType": signType,
+                                "paySign": paySign
+                            },
+                            function (res) {
+                                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                    console.log("支付成功")
+                                } else if (res.err_msg == "get_brand_wcpay_request：cancel") {
+                                    console.log("取消支付")
+                                }
+                            });
+                    }
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        }
+                    } else {
+                        onBridgeReady();
+                    }
+                });
+
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
